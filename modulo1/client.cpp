@@ -32,54 +32,21 @@ int main(void){
     char buffer[TAM_MAX];
     string msg;
 
-    bool flag_tam_max = false;
-
     //enviando mensagens para o servidor
     while(true){
         // se essa flag esta ativada ainda nao enviamos a mensagem anterior por completo, entao nao podemos ler uma nova mensagem
-        if(flag_tam_max == false){
-            cout << "Digite uma mensagem para enviar(/exit - encerrar conexao)\n";
-        }else{
-            cout << "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n";
-        }
-        msg.clear();
-
+        cout << "Digite uma mensagem para enviar(/exit - encerrar conexao)\n";
         cin >> msg;
-        while(msg.size() == TAM_MAX){
-            if(send(client_socket, msg.c_str(), msg.size(), 0) == -1){
-                cout << "Erro ao enviar a mensagem D:\n";
-                exit(-1);
-            }
-            msg.clear();
-            cin >> msg;
-        }
- 
 
-        if(msg.size() > 0){
-            if(send(client_socket, msg.c_str(), msg.size(), 0) == -1){
-                cout << "Erro ao enviar a mensagem D:\n";
-                exit(-1);
-            }
-            msg.clear();
+        // envia a mensagem para o servidor
+        if(send(client_socket, msg.c_str(), msg.size(), 0) == -1){
+            cout << "Erro ao enviar a mensagem D:\n";
+            exit(-1);
         }
-        cout << msg.size() << " < " << "4096 ?\n";
-
-        // envia a mensagem para o servidor(se a mensagem tem mais do que 4096 caracteres, entao vamos mandar apenas os 4096 primeiros chars)
         
-
         // verifica se deve encerrar a conexao
         if(msg == "/exit"){
             break;
-        }
-        cout << msg.size() << " < " << "4096 ?\n";
-        // verificando se precisamos dividir a mensagem em partes pois ela eh muito grande
-        if(msg.size() == TAM_MAX){
-            cout << "MENSAGEM GRANDE, PRECISOU DIVIDIR!!";
-            flag_tam_max = true;
-            // cortando os primeiros 4096 chars, pois ja foram enviados
-            msg = msg.substr(TAM_MAX);
-        }else{
-            flag_tam_max = false;
         }
 
         memset(buffer, 0, sizeof(buffer)); // setando o buffer para 0 para tirar lixo
