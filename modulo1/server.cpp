@@ -5,34 +5,20 @@
 #include <cstring>
 #include <unistd.h>
 
+#include "socket.hpp"
+
 #define TAM_MAX 4096
 
 using namespace std;
 
 int main(void){
 
-    // cria um socket para o servidor
-    // parametros:
-    //      AF_INET: especifica dominio ipv4
-    //      SOCK_STREAM: especifica que eh um socket de fluxo
-    //      0: define o protocolo, quando eh zero o SO decide qual vai ser o melhor protocolo
-    int server_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if(server_socket == -1){
-        cout << "Erro ao criar socket do server!\n";
-        exit(-1);
-    }
-
+    int server_socket = criar_socket();
     
-    struct sockaddr_in endereco_server;
-    endereco_server.sin_family = AF_INET; // ipv4
-    endereco_server.sin_addr.s_addr = INADDR_ANY; // aceita conexoes vindas de qualquer endereco IP
-    endereco_server.sin_port = htons(12345); // definindo a porta
+    struct sockaddr_in endereco_server = config_endereco();
 
     // associando um endereco IP e uma porta a um socket
-    if(bind(server_socket, (struct sockaddr*)&endereco_server, (socklen_t)sizeof(endereco_server)) == -1){
-        cout << "Erro ao vincular socket ao endereco!(bind)\n";
-        exit(-1);
-    }
+    bind_(server_socket, endereco_server);
     
     // configura o servidor para ficar escutando, esperando um client socket
     // 10 eh numero maximo de conexoes que podem ficar na espera

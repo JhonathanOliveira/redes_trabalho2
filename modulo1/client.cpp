@@ -4,29 +4,21 @@
 #include <cstring>
 #include <unistd.h>
 
+#include "socket.hpp"
+
 #define TAM_MAX 4095
 
 using namespace std;
 
 int main(void){
 
-    int client_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if(client_socket == -1){
-        cout << "Erro ao criar o socket do client";
-        exit(-1);
-    }
+    int client_socket = criar_socket();
 
     // configurando endereco do server
-    struct sockaddr_in endereco_server;
-    endereco_server.sin_family = AF_INET; // ipv4
-    endereco_server.sin_addr.s_addr = inet_addr("127.0.0.1"); // aceita conexoes vindas do endereco IP do server apenas
-    endereco_server.sin_port = htons(12345); // definindo a porta em que o server esta escutando
+    struct sockaddr_in endereco_server = config_endereco("127.0.0.1");
 
     // conectando ao servidor
-    if(connect(client_socket, (struct sockaddr*)&endereco_server, sizeof(endereco_server)) == -1){
-        cout << "Erro ao conectar ao servidor!\n";
-        exit(-1);
-    }
+    conectar(client_socket, &endereco_server);
     cout << "Sucesso ao conectar ao server!\n";
 
     char buffer[TAM_MAX];
@@ -35,7 +27,7 @@ int main(void){
     //enviando mensagens para o servidor
     while(true){
         // se essa flag esta ativada ainda nao enviamos a mensagem anterior por completo, entao nao podemos ler uma nova mensagem
-        cout << "Digite uma mensagem para enviar(/exit - encerrar conexao)\n";
+        cout << "Digite uma mensagem para enviar\n\t/exit - encerrar conexao\n";
         cin >> msg;
 
         // envia a mensagem para o servidor
