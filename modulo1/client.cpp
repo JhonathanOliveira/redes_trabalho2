@@ -28,7 +28,7 @@ int main(void){
     while(true){
         // se essa flag esta ativada ainda nao enviamos a mensagem anterior por completo, entao nao podemos ler uma nova mensagem
         cout << "Digite uma mensagem para enviar\n\t/exit - encerrar conexao\n";
-        cin >> msg;
+        getline(cin, msg);
 
         // envia a mensagem para o servidor
         if(send(client_socket, msg.c_str(), msg.size(), 0) == -1){
