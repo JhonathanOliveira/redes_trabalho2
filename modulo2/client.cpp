@@ -98,7 +98,7 @@ int main(void)
     string msg;
     while (true)
     {
-        cout << "Digite uma mensagem para enviar\n\t/quit - Encerrar conexão\n\t/ping - testar conexao com server\n";
+        cout << "Digite uma mensagem para enviar\n\t/quit - Encerrar conexão\n\t/ping - Testar conexão com o servidor\n";
         getline(cin, msg);
 
         // Trata o caso EOF
