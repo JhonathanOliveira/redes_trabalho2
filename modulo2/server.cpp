@@ -15,7 +15,7 @@
 using namespace std;
 
 // Função executada em cada thread de cliente
-void handleClient(int client_socket, const string& nickname, map<string, int>& nick_clients)
+void handleClient(int client_socket, const string& nickname, map<string, int>& nick_clients, int server_socket)
 {
     char buffer[TAM_MAX];
     string msg;
@@ -40,6 +40,14 @@ void handleClient(int client_socket, const string& nickname, map<string, int>& n
             msg = "Cliente (" + nickname + ") desconectou";
             conectado = false;
         }
+        else if(msg == "/ping"){
+            msg = "(SERVER): /pong";
+            if (send(client_socket, msg.c_str(), msg.size(), 0) == -1)
+            {
+                cout << "Falha ao enviar a mensagem para o cliente (" << nickname << ") *-*\n";
+            }
+            continue;
+        }
         else
         {
             cout << "(" << nickname << "): " << msg << "\n";
@@ -60,6 +68,12 @@ void handleClient(int client_socket, const string& nickname, map<string, int>& n
 
     // Remover o cliente do mapa após fechar a conexão
     nick_clients.erase(nickname);
+
+    if(nick_clients.empty()){
+        cout << "Não há mais clientes conectados, fechando server :(\n";
+        close(server_socket);
+        exit(0);
+    }
 }
 
 int main(void)
@@ -103,7 +117,7 @@ int main(void)
         nick_clients[nickname] = client_socket;
 
         // Criar uma nova thread para lidar com o cliente
-        thread clientThread(handleClient, client_socket, nickname, ref(nick_clients));
+        thread clientThread(handleClient, client_socket, nickname, ref(nick_clients), server_socket);
 
         // Detach a thread para permitir que ela continue executando em segundo plano
         clientThread.detach();
