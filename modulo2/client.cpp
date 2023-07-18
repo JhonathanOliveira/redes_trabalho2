@@ -25,7 +25,6 @@ void receiveMessages(int client_socket, string nickname)
         bytesRead = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
         if (bytesRead == -1)
         {
-            cout << "Erro ao receber mensagem do servidor\n";
             break;
         }
         else if (bytesRead == 0)
