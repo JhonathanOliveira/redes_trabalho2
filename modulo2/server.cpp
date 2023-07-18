@@ -37,6 +37,7 @@ void handleClient(int client_socket, const string& nickname, map<string, int>& n
         {
             cout << "Cliente (" << nickname << ") solicitou /quit\n";
             cout << "-> Encerrando conexão com o cliente (" << nickname << ").\n";
+            msg = "Cliente (" + nickname + ") desconectou";
             conectado = false;
         }
         else

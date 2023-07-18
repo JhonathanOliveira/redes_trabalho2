@@ -84,6 +84,7 @@ int main(void)
         if (send(client_socket, msg.c_str(), msg.size(), 0) == -1)
         {
             cout << "Erro ao enviar a mensagem\n";
+
             exit(-1);
         }
 
