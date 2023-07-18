@@ -77,7 +77,7 @@ void handleClient(int client_socket, const string& nickname, map<string, int>& n
     nick_clients.erase(nickname);
 
     if(nick_clients.empty()){
-        cout << "Não há mais clientes conectados, fechando server :(\n";
+        cout << "Não há mais clientes conectados, fechando o servidor :(\n";
         close(server_socket);
         exit(0);
     }

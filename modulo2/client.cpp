@@ -25,7 +25,6 @@ void receiveMessages(int client_socket, string nickname)
         bytesRead = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
         if (bytesRead == -1)
         {
-            cout << "Erro ao receber mensagem do servidor\n";
             break;
         }
         else if (bytesRead == 0)
@@ -50,6 +49,31 @@ int main(void)
     // Configurando o endereço do servidor
     struct sockaddr_in endereco_server = config_endereco("127.0.0.1");
 
+    cout << "[IRC Chat]\n\n";
+    cout << "Comandos:\n";
+    cout << "- /connect - Conectar ao servidor:\n";
+    cout << "- /quit - Sair:\n";
+
+    string action;
+    getline(cin, action);
+
+    while (action != "/connect") {
+
+        if (action == "/quit" || cin.eof())
+        {
+            close(client_socket);
+            return 0;
+        }
+        else {
+            cout << "Comando inválido. Tente novamente\n";
+            cout << "Comandos:\n";
+            cout << "- /connect - Conectar ao servidor:\n";
+            cout << "- /quit - Sair:\n";
+            getline(cin, action);
+        }
+
+    }
+
     // Conectando ao servidor
     conectar(client_socket, &endereco_server);
     cout << "Sucesso ao conectar ao servidor!\n";
@@ -73,7 +97,7 @@ int main(void)
     string msg;
     while (true)
     {
-        cout << "Digite uma mensagem para enviar\n\t/quit - Encerrar conexão\n\t/ping - testar conexao com server\n";
+        cout << "Digite uma mensagem para enviar\n\t/quit - Encerrar conexão\n\t/ping - Testar conexão com o servidor\n";
         getline(cin, msg);
 
         // Trata o caso EOF
