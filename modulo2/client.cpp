@@ -12,7 +12,7 @@
 using namespace std;
 
 // Função executada em uma thread separada para receber mensagens do servidor
-void receiveMessages(int client_socket)
+void receiveMessages(int client_socket, string nickname)
 {
     char buffer[TAM_MAX];
     int bytesRead;
@@ -36,6 +36,9 @@ void receiveMessages(int client_socket)
 
         // Imprime a mensagem recebida
         cout << buffer << "\n";
+        if(buffer == "Cliente (" + nickname + ") desconectou"){
+            break;
+        }
     }
 }
 
@@ -64,13 +67,13 @@ int main(void)
     }
 
     // Cria uma thread separada para receber mensagens do servidor
-    thread receiveThread(receiveMessages, client_socket);
+    thread receiveThread(receiveMessages, client_socket, nickname);
 
     // Enviando mensagens para o servidor
     string msg;
     while (true)
     {
-        cout << "Digite uma mensagem para enviar\n\t/quit - Encerrar conexão\n";
+        cout << "Digite uma mensagem para enviar\n\t/quit - Encerrar conexão\n\t/ping - testar conexao com server\n";
         getline(cin, msg);
 
         // Trata o caso EOF
