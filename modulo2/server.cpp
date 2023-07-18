@@ -57,9 +57,16 @@ void handleClient(int client_socket, const string& nickname, map<string, int>& n
         // Enviar a mensagem para todos os clientes
         for (const auto& pair : nick_clients)
         {
-            if (send(pair.second, msg.c_str(), msg.size(), 0) == -1)
-            {
-                cout << "Falha ao enviar a mensagem para o cliente (" << pair.first << ") *-*\n";
+            for(int i = 0; i < 5; i++){
+                if (send(pair.second, msg.c_str(), msg.size(), 0) == -1)
+                {
+                    cout << "Falha ao enviar a mensagem para o cliente (" << pair.first << ") *-*\n";
+                    if(i == 4){
+                        conectado = false;
+                    }
+                }else{
+                    break;
+                }
             }
         }
     }

@@ -51,6 +51,7 @@ void conectar(int socket, struct sockaddr_in *endereco){
 void bind_(int socket, struct sockaddr_in &endereco) {
     if (bind(socket, (struct sockaddr*)&endereco, sizeof(endereco)) == -1) {
         cout << "Erro ao vincular socket ao endereco!(bind)\n";
+        cout << strerror(errno) << "\n";
         exit(-1);
     }
 }
