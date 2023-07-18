@@ -35,7 +35,7 @@ void receiveMessages(int client_socket)
         }
 
         // Imprime a mensagem recebida
-        cout << "Mensagem recebida: " << buffer << "\n";
+        cout << buffer << "\n";
     }
 }
 
@@ -70,8 +70,15 @@ int main(void)
     string msg;
     while (true)
     {
-        cout << "Digite uma mensagem para enviar\n\t/exit - encerrar conexão\n";
+        cout << "Digite uma mensagem para enviar\n\t/quit - Encerrar conexão\n";
         getline(cin, msg);
+
+        // Trata o caso EOF
+        if (cin.eof())
+        {
+            msg = "/quit";
+        }
+
 
         // Envia a mensagem para o servidor
         if (send(client_socket, msg.c_str(), msg.size(), 0) == -1)
@@ -81,7 +88,7 @@ int main(void)
         }
 
         // Verifica se deve encerrar a conexão
-        if (msg == "/exit")
+        if (msg == "/quit")
         {
             break;
         }

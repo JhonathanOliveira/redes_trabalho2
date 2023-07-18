@@ -19,9 +19,9 @@ void handleClient(int client_socket, const string& nickname, map<string, int>& n
 {
     char buffer[TAM_MAX];
     string msg;
-    bool flag = true;
+    bool conectado = true;
 
-    while (flag)
+    while (conectado)
     {
         memset(buffer, 0, sizeof(buffer));
 
@@ -33,12 +33,11 @@ void handleClient(int client_socket, const string& nickname, map<string, int>& n
 
         msg = buffer;
 
-        if (msg == "/exit")
+        if (msg == "/quit")
         {
-            cout << "Cliente (" << nickname << ") solicitou /exit\n";
-            cout << "Encerrando conexão com o cliente (" << nickname << ").\n";
-            msg = "Encerrando conexão com o cliente.\n";
-            flag = false;
+            cout << "Cliente (" << nickname << ") solicitou /quit\n";
+            cout << "-> Encerrando conexão com o cliente (" << nickname << ").\n";
+            conectado = false;
         }
         else
         {
@@ -86,7 +85,7 @@ int main(void)
             cout << "Falha ao conectar com o cliente :(\n";
             exit(-1);
         }
-        cout << "Cliente conectado :D\nIP do cliente: " << inet_ntoa(endereco_client.sin_addr) << "\n";
+        cout << "Cliente conectado :D\n-> IP do cliente: " << inet_ntoa(endereco_client.sin_addr) << "\n";
 
         char buffer[TAM_MAX];
         string nickname;
@@ -97,7 +96,7 @@ int main(void)
             continue;
         }
         nickname = buffer;
-        cout << "Nickname definido: " << nickname << "\n";
+        cout << "-> Nickname definido: " << nickname << "\n";
 
         // Adicionar o nickname e o socket do cliente ao mapa
         nick_clients[nickname] = client_socket;
