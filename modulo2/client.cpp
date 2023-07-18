@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <cstring>
 #include <unistd.h>
+#include <thread>
 
 #include "socket.hpp"
 
@@ -10,67 +11,87 @@
 
 using namespace std;
 
+// Função executada em uma thread separada para receber mensagens do servidor
+void receiveMessages(int client_socket)
+{
+    char buffer[TAM_MAX];
+    int bytesRead;
+
+    while (true)
+    {
+        memset(buffer, 0, sizeof(buffer));
+
+        // Recebe a mensagem enviada do servidor
+        bytesRead = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
+        if (bytesRead == -1)
+        {
+            cout << "Erro ao receber mensagem do servidor\n";
+            break;
+        }
+        else if (bytesRead == 0)
+        {
+            cout << "Conexão encerrada pelo servidor\n";
+            break;
+        }
+
+        // Imprime a mensagem recebida
+        cout << "Mensagem recebida: " << buffer << "\n";
+    }
+}
+
 int main(void)
 {
 
     int client_socket = criar_socket();
 
-    // configurando endereco do server
+    // Configurando o endereço do servidor
     struct sockaddr_in endereco_server = config_endereco("127.0.0.1");
 
-    // conectando ao servidor
+    // Conectando ao servidor
     conectar(client_socket, &endereco_server);
-    cout << "Sucesso ao conectar ao server!\n";
+    cout << "Sucesso ao conectar ao servidor!\n";
 
-    // definindo um nickname
+    // Definindo um nickname
     string nickname;
     cout << "Defina um nickname: ";
     getline(cin, nickname);
 
-    // envia o nickname para o servidor
+    // Envia o nickname para o servidor
     if (send(client_socket, nickname.c_str(), nickname.size(), 0) == -1)
     {
-        cout << "Erro ao definir o nickname D:\n";
+        cout << "Erro ao definir o nickname\n";
         exit(-1);
     }
 
-    char buffer[TAM_MAX];
-    string msg;
+    // Cria uma thread separada para receber mensagens do servidor
+    thread receiveThread(receiveMessages, client_socket);
 
-    // enviando mensagens para o servidor
+    // Enviando mensagens para o servidor
+    string msg;
     while (true)
     {
-        // se essa flag esta ativada ainda nao enviamos a mensagem anterior por completo, entao nao podemos ler uma nova mensagem
-        cout << "Digite uma mensagem para enviar\n\t/exit - encerrar conexao\n";
+        cout << "Digite uma mensagem para enviar\n\t/exit - encerrar conexão\n";
         getline(cin, msg);
 
-        // envia a mensagem para o servidor
+        // Envia a mensagem para o servidor
         if (send(client_socket, msg.c_str(), msg.size(), 0) == -1)
         {
-            cout << "Erro ao enviar a mensagem D:\n";
+            cout << "Erro ao enviar a mensagem\n";
             exit(-1);
         }
 
-        // verifica se deve encerrar a conexao
+        // Verifica se deve encerrar a conexão
         if (msg == "/exit")
         {
             break;
         }
-
-        memset(buffer, 0, sizeof(buffer)); // setando o buffer para 0 para tirar lixo
-
-        // recebe a mensagem enviada de volta do server
-        int bytesRead = recv(client_socket, buffer, sizeof(buffer) - 1, 0);
-        if (bytesRead == -1)
-        {
-            cout << "Erro ao receber a mensagem de volta do server\n";
-        }
-
-        cout << "(" << nickname << "): " << buffer << "\n";
     }
 
-    // fechando o socket do client
+    // Fechando o socket do cliente
     close(client_socket);
+
+    // Aguarda a thread de recebimento de mensagens terminar
+    receiveThread.join();
 
     return 0;
 }

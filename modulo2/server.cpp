@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <map>
 #include <thread>
+#include <vector>
 
 #include "socket.hpp"
 
@@ -14,7 +15,7 @@
 using namespace std;
 
 // Função executada em cada thread de cliente
-void handleClient(int client_socket, const string& nickname)
+void handleClient(int client_socket, const string& nickname, map<string, int>& nick_clients)
 {
     char buffer[TAM_MAX];
     string msg;
@@ -27,6 +28,7 @@ void handleClient(int client_socket, const string& nickname)
         if (recv(client_socket, buffer, sizeof(buffer) - 1, 0) == -1)
         {
             cout << "Erro ao receber a mensagem do cliente T-T\n";
+            break;
         }
 
         msg = buffer;
@@ -41,16 +43,23 @@ void handleClient(int client_socket, const string& nickname)
         else
         {
             cout << "(" << nickname << "): " << msg << "\n";
+            msg = "(" + nickname + "): " + msg;
         }
 
-        if (send(client_socket, msg.c_str(), msg.size(), 0) == -1)
+        // Enviar a mensagem para todos os clientes
+        for (const auto& pair : nick_clients)
         {
-            cout << "Falha ao enviar a mensagem *-*\n";
-            exit(-1);
+            if (send(pair.second, msg.c_str(), msg.size(), 0) == -1)
+            {
+                cout << "Falha ao enviar a mensagem para o cliente (" << pair.first << ") *-*\n";
+            }
         }
     }
 
     close(client_socket);
+
+    // Remover o cliente do mapa após fechar a conexão
+    nick_clients.erase(nickname);
 }
 
 int main(void)
@@ -63,9 +72,9 @@ int main(void)
         cout << "Erro ao configurar o servidor para a escuta!\n";
         exit(-1);
     }
-    cout << "Servidor na escuta! Esperando conexoes!\n";
+    cout << "Servidor na escuta! Esperando conexões!\n";
 
-    map<string, string> nick_clients;
+    map<string, int> nick_clients;
 
     while (true)
     {
@@ -74,25 +83,27 @@ int main(void)
         int client_socket = accept(server_socket, (struct sockaddr *)&endereco_client, &tam_endereco_client);
         if (client_socket == -1)
         {
-            cout << "Falha ao conectar com client :(\n";
+            cout << "Falha ao conectar com o cliente :(\n";
             exit(-1);
         }
-        cout << "Cliente conectado :D\n IP do cliente: " << inet_ntoa(endereco_client.sin_addr) << "\n";
+        cout << "Cliente conectado :D\nIP do cliente: " << inet_ntoa(endereco_client.sin_addr) << "\n";
 
         char buffer[TAM_MAX];
         string nickname;
         if (recv(client_socket, buffer, sizeof(buffer) - 1, 0) == -1)
         {
             cout << "Erro ao definir o nickname do cliente T-T\n";
+            close(client_socket);
+            continue;
         }
         nickname = buffer;
         cout << "Nickname definido: " << nickname << "\n";
 
-        // Adicione o nickname e o socket do cliente ao mapa
+        // Adicionar o nickname e o socket do cliente ao mapa
         nick_clients[nickname] = client_socket;
 
-        // Crie uma nova thread para lidar com o cliente
-        thread clientThread(handleClient, client_socket, nickname);
+        // Criar uma nova thread para lidar com o cliente
+        thread clientThread(handleClient, client_socket, nickname, ref(nick_clients));
 
         // Detach a thread para permitir que ela continue executando em segundo plano
         clientThread.detach();
