@@ -6,7 +6,7 @@
 | Jhonathan Oliveira Alves     | 11838116  |
 | Miguel Reis de Araújo        | 12752457  |
 ----
-### Vídeo de Apresentação do Trabalho: [link](google.com.br)
+### Vídeo de Apresentação do Trabalho: [link](google.com)
 ## Instruções para execução
 Para executar Módulo 1 ou Módulo 2 faça: \
 `cd modulo1/` ou `cd modulo2/` \
