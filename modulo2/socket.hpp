@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <cstring>
 #include <unistd.h>
+#include <csignal>
 
 #define PORTA 12345
 
@@ -17,3 +18,5 @@ struct sockaddr_in config_endereco();
 void conectar(int socket, struct sockaddr_in *endereco);
 
 void bind_(int socket, struct sockaddr_in &endereco);
+
+void handleSignal(int signal);

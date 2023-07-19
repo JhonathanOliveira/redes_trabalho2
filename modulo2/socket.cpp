@@ -56,3 +56,11 @@ void bind_(int socket, struct sockaddr_in &endereco) {
         exit(-1);
     }
 }
+
+void handleSignal(int signal)
+{
+    if (signal == SIGINT)
+    {
+        cout << "Não é possivel parar o programa com Ctrl+C ;p\n";
+    }
+}

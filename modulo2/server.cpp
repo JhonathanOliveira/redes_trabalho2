@@ -7,6 +7,7 @@
 #include <map>
 #include <thread>
 #include <vector>
+#include <csignal>
 
 #include "socket.hpp"
 
@@ -85,6 +86,8 @@ void handleClient(int client_socket, const string& nickname, map<string, int>& n
 
 int main(void)
 {
+    signal(SIGINT, handleSignal);
+    
     int server_socket = criar_socket();
     struct sockaddr_in endereco_server = config_endereco();
     bind_(server_socket, endereco_server);

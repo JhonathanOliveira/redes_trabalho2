@@ -4,7 +4,7 @@
 #include <cstring>
 #include <unistd.h>
 #include <thread>
-#include <signal.h>
+#include <csignal>
 
 #include "socket.hpp"
 
@@ -44,7 +44,8 @@ void receiveMessages(int client_socket, string nickname)
 
 int main(void)
 {
-
+    signal(SIGINT, handleSignal);
+    
     int client_socket = criar_socket();
 
     // Configurando o endereço do servidor
@@ -98,6 +99,7 @@ int main(void)
 
     // Enviando mensagens para o servidor
     string msg;
+
     while (true)
     {
         cout << "Digite uma mensagem para enviar\n\t/quit - Encerrar conexão\n\t/ping - Testar conexão com o servidor\n";
