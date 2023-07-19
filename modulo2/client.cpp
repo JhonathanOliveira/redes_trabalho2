@@ -4,6 +4,7 @@
 #include <cstring>
 #include <unistd.h>
 #include <thread>
+#include <signal.h>
 
 #include "socket.hpp"
 
@@ -70,6 +71,7 @@ int main(void)
             cout << "- /connect - Conectar ao servidor:\n";
             cout << "- /quit - Sair:\n";
             getline(cin, action);
+            signal(SIGINT, SIG_IGN);
         }
 
     }
@@ -82,6 +84,7 @@ int main(void)
     string nickname;
     cout << "Defina um nickname: ";
     getline(cin, nickname);
+    signal(SIGINT, SIG_IGN);
 
     // Envia o nickname para o servidor
     if (send(client_socket, nickname.c_str(), nickname.size(), 0) == -1)
@@ -99,6 +102,7 @@ int main(void)
     {
         cout << "Digite uma mensagem para enviar\n\t/quit - Encerrar conexão\n\t/ping - Testar conexão com o servidor\n";
         getline(cin, msg);
+        signal(SIGINT, SIG_IGN);
 
         // Trata o caso EOF
         if (cin.eof())

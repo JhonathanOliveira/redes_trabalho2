@@ -54,7 +54,7 @@ void handleClient(int client_socket, const string& nickname, map<string, int>& n
             msg = "(" + nickname + "): " + msg;
         }
 
-        // Enviar a mensagem para todos os clientes
+        // Envia a mensagem para todos os clientes
         for (const auto& pair : nick_clients)
         {
             for(int i = 0; i < 5; i++){
@@ -73,7 +73,7 @@ void handleClient(int client_socket, const string& nickname, map<string, int>& n
 
     close(client_socket);
 
-    // Remover o cliente do mapa após fechar a conexão
+    // Remove o cliente do mapa após fechar a conexão
     nick_clients.erase(nickname);
 
     if(nick_clients.empty()){
@@ -120,13 +120,13 @@ int main(void)
         nickname = buffer;
         cout << "-> Nickname definido: " << nickname << "\n";
 
-        // Adicionar o nickname e o socket do cliente ao mapa
+        // Adiciona o nickname e o socket do cliente ao mapa
         nick_clients[nickname] = client_socket;
 
-        // Criar uma nova thread para lidar com o cliente
+        // Cria uma nova thread para lidar com o cliente
         thread clientThread(handleClient, client_socket, nickname, ref(nick_clients), server_socket);
 
-        // Detach a thread para permitir que ela continue executando em segundo plano
+        // Separa a thread para permitir que ela continue executando em segundo plano
         clientThread.detach();
     }
 
