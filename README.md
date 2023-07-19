@@ -1,5 +1,4 @@
-# Trabalho da Disciplina
-# SSC0142-Redes de Computadores
+# Trabalho da Disciplina: SSC0142-Redes de Computadores
 
 | Nome                         | NUSP      |
 | ---------------------------- | --------- |
