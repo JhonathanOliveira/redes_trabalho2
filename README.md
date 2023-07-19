@@ -6,7 +6,7 @@
 | Jhonathan Oliveira Alves     | 11838116  |
 | Miguel Reis de Araújo        | 12752457  |
 ----
-### Vídeo de Apresentação do Trabalho: [link](https://edisciplinas.usp.br/)
+### Vídeo de Apresentação do Trabalho: [link](https://edisciplinas.usp.br/)(EM BREVE, FAZENDO UPLOAD DO VIDEO NO MOMENTO)
 ## Instruções para execução
 Para executar Módulo 1 ou Módulo 2 faça: \
 `cd modulo1/` ou `cd modulo2/` \
@@ -17,7 +17,7 @@ Depois basta abrir um terminal para o server e outro(s) para o cliente: \
 `./client` \
 OBS1: é necessário executar o 'server.cpp' primeiro e depois o 'client.cpp' para que ocorra funcionamento esperado\
 OBS2: no módulo 1 é possível conectar apenas um cliente, no módulo 2 é possível conectar mais clientes
-## Sistema Operacional e versão usada (Linux)(EM BREVE, FAZENDO UPLOAD DO VIDEO NO MOMENTO)
+## Sistema Operacional e versão usada (Linux)
 Ubuntu 20.04.4 LTS \
 g++ 9.4.0 \
 & \
