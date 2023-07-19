@@ -6,7 +6,7 @@
 | Jhonathan Oliveira Alves     | 11838116  |
 | Miguel Reis de Araújo        | 12752457  |
 ----
-### Vídeo de Apresentação do Trabalho: [link]([https://edisciplinas.usp.br/](https://drive.google.com/drive/folders/1Lh1GE10hBlpxeGKdZQGPPegrDHnYLezC?usp=sharing))(EM BREVE, FAZENDO UPLOAD DO VIDEO NO MOMENTO)
+### Vídeo de Apresentação do Trabalho: [link]([https://edisciplinas.usp.br/](https://drive.google.com/drive/folders/1Lh1GE10hBlpxeGKdZQGPPegrDHnYLezC?usp=sharing)(EM BREVE, FAZENDO UPLOAD DO VIDEO NO MOMENTO)
 ## Instruções para execução
 Para executar Módulo 1 ou Módulo 2 faça: \
 `cd modulo1/` ou `cd modulo2/` \
